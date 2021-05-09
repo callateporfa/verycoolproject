@@ -1,5 +1,8 @@
 import pymorphy2
+import nltk
+nltk.download("stopwords")
 from wordcloud import WordCloud, STOPWORDS
+from nltk.corpus import stopwords
 import sys, os
 import json
 import string
@@ -20,9 +23,7 @@ for key in json_dict:
 with open('new_res.json', 'w', encoding = 'utf-8') as new:
     json.dump(json_dict, new, ensure_ascii=False, indent=2)
 
-    stopwords = STOPWORDS
-    res = ['не', '', 'как', 'только', 'вы', 'за', 'я', 'же', 'но', 'бы', 'этот', 'а', 'для', 'то', 'с', 'на', 'в', 'из', 'так', 'ещё', 'и', 'это', 'у', 'по', 'такой', 'всё', 'быть', 'что']
-    stopwords.update(res)
+    stopwords = list(STOPWORDS)+list(stopwords.words('russian')) + res # res берем из new_stop_list_maker
     wc = WordCloud(
             background_color='white',
             stopwords=stopwords,
