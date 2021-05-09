@@ -25,12 +25,12 @@ for key in json_dict:
             blin.append(word)
     json_dict[key] = blin
 
-#сделали
+# сделали
 with open('new_res.json', 'w', encoding = 'utf-8') as new:
     json.dump(json_dict, new, ensure_ascii=False, indent=2)
 
 
-'''ищем стопслова
+# ищем стопслова
 with open('new_res.json', 'r', encoding='utf-8') as f:
     json_dict = json.load(f)
 most_common_total = []
@@ -46,12 +46,12 @@ for key in json_dict:
             if isinstance(word, str) is True:
                 most_common_total.append(word)
 
-#нашли
+# нашли
 res = []
 for i in most_common_total:
     if most_common_total.count(i) == 12:
         res.append(i)
-'''
+res = list(set(res))
 
 new = open('new_res.json', 'r', encoding='utf-8').read()
 for key in json_dict:
@@ -60,10 +60,7 @@ for key in json_dict:
 
 for key in json_dict:
     text = open(str(key) + '.json', 'r', encoding='utf-8').read()
-    stoplist = list(STOPWORDS)+list(stopwords.words('russian'))+['это', 'на', 'не', 'я', 'что', 'то', 'в','и', 'как','это', 'а', 'с', 'свой', 'весь', 'который', 'мочь',
-                                                 'только', 'так', 'же', 'также', 'за', 'или','без','но', 'бы', 'если',
-                                                'очень', 'там', 'для', 'где', 'вот', 'по', 'кто', 'было', 'тоже', 'n',
-                                                'ещё', 'всё', 'всем', 'просто', 'вообще', 'почему', 'скоро','блин', 'её']
+    stoplist = list(STOPWORDS)+list(stopwords.words('russian'))+res
 
     wc = WordCloud(
         background_color = 'white',
