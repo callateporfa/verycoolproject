@@ -1,0 +1,21 @@
+#простенький код для подсчета комментариев в каждом паблике и слов в комментариях каждого паблика
+
+#подсчитывает количество комментариев
+with open('results.json', encoding = 'utf-8') as f:
+    json_dict = json.load(f)
+for key in json_dict:
+    c = 0
+    for value in json_dict[key]:
+        c += 1
+    print(c)
+
+#подсчитывает количество слов в комментариях каждого из пабликов
+with open('results.json', encoding = 'utf-8') as f:
+    json_dict = json.load(f)
+for key in json_dict:
+    c = 0
+    for value in json_dict[key]:
+        value = value.split()
+        for word in value:
+            c += 1
+    print(c)
