@@ -12,5 +12,5 @@ for key in json_dict:
         for word in value:
             word = morph.parse(word)[0].normal_form
             list_of_lemmas.append(word)
-    json_dict[key] = blin
+    json_dict[key] = list_of_lemmas
 print(json_dict)
