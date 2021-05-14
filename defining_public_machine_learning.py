@@ -1,60 +1,64 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import CountVectorizer,TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
-new_data = pd.DataFrame(dict)
-DataFrame(dict([ (k,Series(v)) for k,v in new_data.items() ]))
+import json
+with open('results.json', encoding='utf-8') as f:
+    data = json.load(f)
+new_dict = {}
+for key in data:
+    for value in data[key]:
+        new_dict[value] = key
+comments = []
+for key in new_dict:
+    comments.append(key)
 
-training_data = new_data.copy()
-testing_data = new_data.copy()
+pubs = []
+for value in new_dict.values():
+    pubs.append(value)
 
-from sklearn.feature_extraction.text import TfidfVectorizer
+data = {'comments': comments, 'pub': pubs}
+data = pd.DataFrame(dict([(k, pd.Series(v)) for k, v in data.items()]))
 
-# векторизатор -- это штука, умеющая превращать тексты
-# в наборы чисел фиксированной длины
+training_data = data.copy()
+testing_data = data.copy()
 
-tfidf_vectorizer = TfidfVectorizer(ngram_range=(1, 1),
-                                   max_features=1000)
+X = training_data.comments
+y = training_data.pub
+tfidf_vectorizer = TfidfVectorizer(ngram_range=(1, 1), max_features=1000)
 
-# ngram_range=(1, 1) -- словом считается слово 
-# (а могло бы как слово, так и два слова)
-# max_features=1000 -- надо как-то оставить только 1000 слов из всех
-
-
-X = training_data.text
+X = training_data.comments
 y = training_data.pub
 
-# мы хотим, чтобы каждый коммент превратился из текста в числа
-# традиционно хочется чтобы каждый комент описывался одним и тем же
-# количеством чисел
 X_featurized = tfidf_vectorizer.fit_transform(X)
 
-new_data.columns = ["comments", "pub"]
+data.columns = ["comments", "pub"]
 
-clf = LogisticRegression()  # завели себе модель машинного обучения
-# модель пока не знает, как быть с нашими данными
-# давайте покажем ей наши данные, пусть учится:
+clf = LogisticRegression()
 clf.fit(X_featurized, y)
 
-X_test_featurized = tfidf_vectorizer.transform(new_data.comments)
-test_pred = clf.predict(X_test_featurized)
+with open('test_data.json', encoding='utf-8') as f:
+    new_data = json.load(f)
+    new_dict = {}
+    for key in new_data:
+        for value in new_data[key]:
+            new_dict[value] = key
+comments = []
+for key in new_dict:
+    comments.append(key)
 
-new_new_data = pd.DataFrame({"text": ["кошка ест еду"], "pub": ["лентач"]})
-new_new_data
-#тестовый материал
+pubs = []
+for value in new_dict.values():
+    pubs.append(value)
+new_data = {'comments': comments, 'pub': pubs}
+new_data = pd.DataFrame(dict([(k, pd.Series(v)) for k, v in new_data.items()]))
+new_data.columns = ["comments", "pub"]
 
-newX = new_new_data.text
-newY = new_new_data.pub
+newX = new_data.comments
+newY = new_data.pub
 
 newXfeaturized = tfidf_vectorizer.transform(newX)
 new_pred = clf.predict(newXfeaturized)
 
-newX = new_new_data.text
-newY = new_new_data.pub
-
-newXfeaturized = tfidf_vectorizer.transform(newX)
-new_pred = clf.predict(newXfeaturized)
-
-new_pred
-#то что предсказывает программа
+print(new_pred)
