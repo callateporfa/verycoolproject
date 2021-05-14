@@ -7,6 +7,7 @@ import sys, os
 import json
 import string
 os.chdir(sys.path[0])
+
 morph = pymorphy2.MorphAnalyzer()
 with open('results.json', encoding='utf-8') as f:
     json_dict = json.load(f)
