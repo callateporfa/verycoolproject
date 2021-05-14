@@ -3,7 +3,7 @@ import json
 import string
 import pymorphy2
 morph = pymorphy2.MorphAnalyzer()
-#создаем частотный словарь в виде {'слово в начальной форме': [сколько раз встречается в паблике 1, паблике 2, ... паблике12]:
+#создаем частотный словарь в виде {'слово в начальной форме': [сколько раз встречается в паблике 1, паблике 2, ... паблике12]
 with open('results.json', encoding='utf-8') as f:
     json_dict = json.load(f)
 most_common_total = []
@@ -16,7 +16,7 @@ for key in json_dict:
                 c[word] += 1
     json_dict[key] = c
 json_freq_dict = {}
-with open('new_res.json', encoding = 'utf-8') as f:#это файл со всеми словами в н.ф. построчным списком просто в текстовом формате формате, который делался для облаков
+with open('new_res.json', encoding = 'utf-8') as f:#это файл со всеми словами в н.ф. который делала Арина для облаков
     data = json.load(f)
 data = list(data)
 for word in data:
@@ -33,15 +33,14 @@ data = input('Введите комментарий: ')
 data = data.split(' ')
 for word in data:
     word = word.strip(string.punctuation).lower()
-#приводим слова в инпутном комментарии к лемме и если слово есть в нашем частотном словаре, то мы берем список частотностей в 12 пабликах и прибавляем его почленно к probabilities (похоже на сложение столбиком)
+
 probabilities = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 for word in data:
     word = morph.parse(word)[0].normal_form
     if word in json_freq_dict: 
         for i in range(12):
             probabilities[i] += json_freq_dict[word][i] 
-
-#каждую из полученных сумм вероятностей домножаем на коэффициент встречаемости паблика (т.е. количество слов из комментариев этого паблика в наших данных / сумма всех слов во всех комментариях)
+                
 probabilities[0] = probabilities[0]*3435/88033
 probabilities[1] = probabilities[1]*11902/88033
 probabilities[2] = probabilities[2]*11807/88033
@@ -55,7 +54,6 @@ probabilities[9] = probabilities[9]*3549/88033
 probabilities[10] = probabilities[10]*5709/88033
 probabilities[11] = probabilities[11]*2812/88033
 
-#ищем номер паблика, у которого полученная вероятность получилась максимальной и присваиваем каждому номеру название
 number = probabilities.index(max(probabilities)) + 1
 if number == 1:
     name = 'Типография НИУ ВШЭ'
@@ -81,5 +79,4 @@ if number == 11:
     name = 'реализм кухонной раковины'
 if number ==  12:
     name = 'астрофотография'
-
 print('Вероятно, это паблик номер ', number, ',', name)
