@@ -2,8 +2,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-
 import json
+
 with open('results.json', encoding='utf-8') as f:
     data = json.load(f)
 new_dict = {}
@@ -27,9 +27,6 @@ testing_data = data.copy()
 X = training_data.comments
 y = training_data.pub
 tfidf_vectorizer = TfidfVectorizer(ngram_range=(1, 1), max_features=1000)
-
-X = training_data.comments
-y = training_data.pub
 
 X_featurized = tfidf_vectorizer.fit_transform(X)
 
